@@ -10,6 +10,11 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import java.sql.*;
 import javafx.scene.control.Alert;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import java.io.IOException;
 
 public class UserRegistrationController implements Initializable {
 
@@ -55,16 +60,6 @@ public class UserRegistrationController implements Initializable {
         userPassword = this.userPAssword.getText();
 
         try {
-            System.out.println(accountName);
-            System.out.println(userName);
-            System.out.println(userEmail);
-            System.out.println(userNid);
-            System.out.println(userPhone);
-            System.out.println(userAddress);
-            System.out.println(userPassword);
-          
-            
-
             con = database.connectDb();
             String que = "insert into userInfo values(? ,? , ? , ? , ? , ? , ?)";
             pst = con.prepareStatement(que);
@@ -87,6 +82,21 @@ public class UserRegistrationController implements Initializable {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
+
+    }
+
+    @FXML
+    void gotoLoginPage(ActionEvent event) throws IOException {
+
+//        to  hide sign up form 
+        signupBtn.getScene().getWindow().hide();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
+        Parent root = loader.load();
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
 
     }
 
