@@ -98,6 +98,8 @@ public class UserRegistrationController implements Initializable {
         stage.setScene(new Scene(root));
         stage.show();
 
+
+
     }
 
     @Override

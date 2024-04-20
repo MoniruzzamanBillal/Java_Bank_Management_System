@@ -1,15 +1,20 @@
 package bankmanagementsystem;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
+import javafx.stage.Stage;
 
 public class LoginController implements Initializable {
 
@@ -22,11 +27,29 @@ public class LoginController implements Initializable {
     private Button loginBtn;
 
     @FXML
+    private Button registrationPage;
+
+    @FXML
     private TextField userEmail;
 
     @FXML
 
     private PasswordField userPassword;
+
+    @FXML
+    void gotoRegisterPage(ActionEvent event) throws IOException {
+
+        //        to  hide login form 
+        loginBtn.getScene().getWindow().hide();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("userRegistration.fxml"));
+        Parent root = loader.load();
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
+
+    }
 
     @FXML
     void handleLogin(ActionEvent event) {
@@ -39,16 +62,18 @@ public class LoginController implements Initializable {
         try {
 
             con = database.connectDb();
-            String que = "Select  * from userInfo where userEmail=? and userPassword=?";
+            String que = "Select * from userInfo where userEmail=? and userPassword=?";
+
             pst = con.prepareStatement(que);
             pst.setString(1, userEmail);
             pst.setString(2, userPassword);
 
+            System.out.println("SQL Query: " + pst.toString()); // Print the SQL query
+
             rs = pst.executeQuery();
 
-            System.out.println(rs.next());
-
-            if (rs.next() == false) {
+            if (!rs.next()) {
+                System.out.println("No rows found"); // Debugging statement
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error Message");
                 alert.setHeaderText(null);
@@ -57,10 +82,7 @@ public class LoginController implements Initializable {
                 this.userEmail.setText("");
                 this.userPassword.setText("");
 
-            }
-
-            while (rs.next()) {
-
+            } else {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Information Message");
                 alert.setHeaderText(null);
@@ -72,10 +94,14 @@ public class LoginController implements Initializable {
                 System.out.println(rs.getString("userPassword"));
                 System.out.println(rs.getString("userAddress"));
 
-//                 tot hide login  form 
-//                    loginBtn.getScene().getWindow().hide();
+                LoggedInUser loginUser = new LoggedInUser(rs.getString("userName"), rs.getString("userEmail"), rs.getString("userPassword"), rs.getString("userAddress"));
+
             }
 
+
+////                 tot hide login  form 
+////                    loginBtn.getScene().getWindow().hide();
+//            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();

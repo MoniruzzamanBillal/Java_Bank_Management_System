@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="bankmanagementsystem.LoginController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bankmanagementsystem.LoginController">
    <children>
       <Label layoutX="248.0" layoutY="27.0" prefHeight="46.0" prefWidth="104.0" text="Login">
          <font>
@@ -40,5 +39,6 @@
             <Font size="14.0" />
          </font>
       </PasswordField>
+      <Button fx:id="registrationPage" layoutX="228.0" layoutY="309.0" mnemonicParsing="false" onAction="#gotoRegisterPage" text="Don't have any account ? Register" />
    </children>
 </AnchorPane>
