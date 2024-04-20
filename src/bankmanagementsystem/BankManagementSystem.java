@@ -15,8 +15,9 @@ public class BankManagementSystem extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("userRegistration.fxml"));
+//        Parent root = FXMLLoader.load(getClass().getResource("userRegistration.fxml"));
 //         Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
+          Parent root = FXMLLoader.load(getClass().getResource("Dashboard.fxml"));
         
         Scene scene = new Scene(root);
         
