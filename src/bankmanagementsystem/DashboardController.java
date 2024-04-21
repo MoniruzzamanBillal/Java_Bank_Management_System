@@ -51,13 +51,17 @@ public class DashboardController implements Initializable {
     private Button dashboardWithdrawBtn;
 
     @FXML
-    private Label balanceNumber;
+    private Label withdraw_totalWithdraw;
+    
 
     @FXML
     private Button depositBtn;
 
     @FXML
     private TextField depositMoneyInput;
+
+    @FXML
+    private Label deposit_TotalDEpositAmount;
 
     @FXML
     private Label details_accountNo;
@@ -117,33 +121,43 @@ public class DashboardController implements Initializable {
 
     @FXML
     void handleAddDeposit(ActionEvent event) {
-
         try {
-
             String email = LoggedInUser.userEmail;
             String depositAmount = depositMoneyInput.getText();
             LocalDate currentDate = LocalDate.now();
-            
-            System.out.println(currentDate.toString());
-            
+
             con = database.connectDb();
-            String que = " insert into deposit values (  ? , ? , ? ) " ;
+            String que = " insert into deposit values (  ? , ? , ? ) ";
             pst = con.prepareStatement(que);
-            pst.setString(1,email);
-              pst.setString(2,depositAmount);
-              pst.setString(3,currentDate.toString());
-              
-              pst.executeUpdate();
-              
-                          Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            pst.setString(1, email);
+            pst.setString(2, depositAmount);
+            pst.setString(3, currentDate.toString());
+
+            pst.executeUpdate();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Deposit Money");
             alert.setHeaderText(null);
             alert.setContentText("Money deposit successfully!!");
             alert.showAndWait();
-            
+
             depositMoneyInput.setText("");
             
-
+            String que2 = " SELECT SUM(CAST(depositAmount AS DECIMAL(10,2)))  FROM deposit WHERE userEmail = ?   ";
+            pst = con.prepareStatement(que2);
+            pst.setString(1, email);
+            rs = pst.executeQuery();
+            if (!rs.next()) {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setHeaderText(null);
+                alert.setContentText("No user found for this email - " + email);
+                alert.showAndWait();
+            } else {
+                String totalDepositAmount = rs.getString(1);
+                System.out.println("Total deposit = " + totalDepositAmount);
+                deposit_TotalDEpositAmount.setText(totalDepositAmount);
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -163,6 +177,65 @@ public class DashboardController implements Initializable {
 
     @FXML
     void handleWithdrawMoney(ActionEvent event) {
+        
+        try{
+              String email = LoggedInUser.userEmail;
+            String withdrawAmount = withdrawInput.getText();
+            LocalDate currentDate = LocalDate.now();
+            
+                        con = database.connectDb();
+            String que = " insert into withdraw values (  ? , ? , ? ) ";
+            pst = con.prepareStatement(que);
+            pst.setString(1, email);
+            pst.setString(2, withdrawAmount);
+            pst.setString(3, currentDate.toString());
+
+            pst.executeUpdate();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Withdraw Money");
+            alert.setHeaderText(null);
+            alert.setContentText("Money withdraw successfully!!");
+            alert.showAndWait();
+
+            withdrawInput.setText("");
+            
+            
+            String que2 = " SELECT SUM(CAST(withdrawAmount AS DECIMAL(10,2)))  FROM withdraw WHERE userEmail = ?   ";
+            
+            pst = con.prepareStatement(que2);
+            pst.setString(1, email);
+
+            rs = pst.executeQuery();
+
+            if (!rs.next()) {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setHeaderText(null);
+                alert.setContentText("No user found for this email - " + email);
+                alert.showAndWait();
+
+            } else {
+
+                String totalDepositAmount = rs.getString(1);
+                System.out.println("Total deposit = " + totalDepositAmount);
+
+                withdraw_totalWithdraw.setText(totalDepositAmount);
+
+            }
+            
+            
+            
+            
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
 
     }
 
@@ -175,6 +248,43 @@ public class DashboardController implements Initializable {
     @FXML
     void handleShowDepositForm(ActionEvent event) {
         switchForm(event);
+
+        try {
+            String email = LoggedInUser.userEmail;
+            con = database.connectDb();
+            String que2 = " SELECT SUM(CAST(depositAmount AS DECIMAL(10,2)))  FROM deposit WHERE userEmail = ?   ";
+
+            pst = con.prepareStatement(que2);
+            pst.setString(1, email);
+
+            rs = pst.executeQuery();
+
+            if (!rs.next()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setHeaderText(null);
+                alert.setContentText("No user found for this email - " + email);
+                alert.showAndWait();
+
+            } else {
+
+                String totalDepositAmount = rs.getString(1);
+                System.out.println("Total deposit = " + totalDepositAmount);
+
+                deposit_TotalDEpositAmount.setText(totalDepositAmount);
+
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+
     }
 
     @FXML
@@ -190,6 +300,34 @@ public class DashboardController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+
+        System.out.println("logged in user in dashboard = " + LoggedInUser.userEmail);
+
+        // Check if the deposit form is visible
+        if (DepositForm.isVisible()) {
+            // If yes, fetch and display the total deposit amount
+            try {
+                String email = LoggedInUser.userEmail;
+
+                con = database.connectDb();
+                String que2 = "SELECT SUM(CAST(depositAmount AS DECIMAL(10,2))) FROM deposit WHERE userEmail = ?";
+                pst = con.prepareStatement(que2);
+                pst.setString(1, email);
+                rs = pst.executeQuery();
+
+                if (rs.next()) {
+                    String totalDepositAmount = rs.getString(1);
+                    deposit_TotalDEpositAmount.setText(totalDepositAmount);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Error fetching total deposit amount: " + e.getMessage());
+                alert.showAndWait();
+            }
+        }
 
         System.out.println("logged in user in dashboard = " + LoggedInUser.userEmail);
 

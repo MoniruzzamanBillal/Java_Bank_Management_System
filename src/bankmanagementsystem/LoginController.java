@@ -68,7 +68,6 @@ public class LoginController implements Initializable {
             pst.setString(1, userEmail);
             pst.setString(2, userPassword);
 
-
             rs = pst.executeQuery();
 
             if (!rs.next()) {

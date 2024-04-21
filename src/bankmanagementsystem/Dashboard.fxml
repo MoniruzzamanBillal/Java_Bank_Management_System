@@ -43,7 +43,7 @@
             </Button>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="AccountDetailForm" layoutX="200.0" layoutY="3.0" prefHeight="687.0" prefWidth="552.0" style="-fx-background-color: #f3f7d9;">
+      <AnchorPane fx:id="AccountDetailForm" layoutX="200.0" layoutY="3.0" prefHeight="687.0" prefWidth="552.0" style="-fx-background-color: #f3f7d9;" visible="false">
          <children>
             <Label layoutX="188.0" layoutY="26.0" text="Account Details">
                <font>
@@ -92,7 +92,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="DepositForm" layoutX="200.0" layoutY="3.0" prefHeight="694.0" prefWidth="552.0" style="-fx-background-color: ##f3f7d9;" visible="false">
+      <AnchorPane fx:id="DepositForm" layoutX="200.0" layoutY="14.0" prefHeight="694.0" prefWidth="552.0" style="-fx-background-color: ##f3f7d9;">
          <children>
             <Label layoutX="168.0" layoutY="21.0" text="Deposit Money">
                <font>
@@ -114,6 +114,16 @@
                   <Font name="System Bold Italic" size="18.0" />
                </font>
             </Button>
+            <Label layoutX="140.0" layoutY="452.0" text="Balance : ">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="deposit_TotalDEpositAmount" layoutX="253.0" layoutY="452.0" text="300 ">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="withdrawForm" layoutX="200.0" layoutY="-2.0" prefHeight="697.0" prefWidth="552.0" style="-fx-background-color: #f3f7d9;" visible="false">
@@ -143,7 +153,7 @@
                   <Font name="System Bold" size="24.0" />
                </font>
             </Label>
-            <Label fx:id="balanceNumber" layoutX="224.0" layoutY="504.0" text="Balance amount ">
+            <Label fx:id="withdraw_totalWithdraw" layoutX="224.0" layoutY="504.0" text="Balance amount ">
                <font>
                   <Font size="24.0" />
                </font>
