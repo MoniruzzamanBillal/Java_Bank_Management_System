@@ -93,11 +93,10 @@ public class LoginController implements Initializable {
                 System.out.println(rs.getString("userEmail"));
                 System.out.println(rs.getString("userPassword"));
                 System.out.println(rs.getString("userAddress"));
-
-                LoggedInUser loginUser = new LoggedInUser(rs.getString("userName"), rs.getString("userEmail"), rs.getString("userPassword"), rs.getString("userAddress"));
+                LoggedInUser.userName = rs.getString("userName");
+                LoggedInUser.userEmail = rs.getString("userEmail");
 
             }
-
 
 ////                 tot hide login  form 
 ////                    loginBtn.getScene().getWindow().hide();
