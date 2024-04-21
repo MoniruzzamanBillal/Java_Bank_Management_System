@@ -77,10 +77,27 @@ public class UserRegistrationController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("user Addedddd!");
             alert.showAndWait();
+            
+            //        to  hide sign up form 
+        signupBtn.getScene().getWindow().hide();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
+        Parent root = loader.load();
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
+        
+        
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(); 
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setHeaderText(null);
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
         }
 
     }

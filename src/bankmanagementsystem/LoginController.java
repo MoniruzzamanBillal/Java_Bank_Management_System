@@ -68,12 +68,10 @@ public class LoginController implements Initializable {
             pst.setString(1, userEmail);
             pst.setString(2, userPassword);
 
-            System.out.println("SQL Query: " + pst.toString()); // Print the SQL query
 
             rs = pst.executeQuery();
 
             if (!rs.next()) {
-                System.out.println("No rows found"); // Debugging statement
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error Message");
                 alert.setHeaderText(null);
@@ -95,12 +93,20 @@ public class LoginController implements Initializable {
                 System.out.println(rs.getString("userAddress"));
                 LoggedInUser.userName = rs.getString("userName");
                 LoggedInUser.userEmail = rs.getString("userEmail");
+                
+                      //        to  hide Login form 
+        loginBtn.getScene().getWindow().hide();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
+        Parent root = loader.load();
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
 
             }
 
-////                 tot hide login  form 
-////                    loginBtn.getScene().getWindow().hide();
-//            }
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
