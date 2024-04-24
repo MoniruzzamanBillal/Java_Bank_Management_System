@@ -43,7 +43,7 @@
             </Button>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="AccountDetailForm" layoutX="200.0" layoutY="3.0" prefHeight="687.0" prefWidth="552.0" style="-fx-background-color: #f3f7d9;" visible="false">
+      <AnchorPane fx:id="AccountDetailForm" layoutX="200.0" layoutY="3.0" prefHeight="687.0" prefWidth="552.0" style="-fx-background-color: #f3f7d9;">
          <children>
             <Label layoutX="188.0" layoutY="26.0" text="Account Details">
                <font>
@@ -92,7 +92,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="DepositForm" layoutX="200.0" layoutY="14.0" prefHeight="694.0" prefWidth="552.0" style="-fx-background-color: ##f3f7d9;">
+      <AnchorPane fx:id="DepositForm" layoutX="200.0" layoutY="14.0" prefHeight="694.0" prefWidth="552.0" style="-fx-background-color: ##f3f7d9;" visible="false">
          <children>
             <Label layoutX="168.0" layoutY="21.0" text="Deposit Money">
                <font>
@@ -167,7 +167,7 @@
                   <Font name="System Bold" size="30.0" />
                </font>
             </Label>
-            <Label layoutX="93.0" layoutY="155.0" prefHeight="28.0" prefWidth="243.0" text="Receiver account number : ">
+            <Label layoutX="93.0" layoutY="155.0" prefHeight="28.0" prefWidth="243.0" text="Receiver account name : ">
                <font>
                   <Font name="System Bold" size="19.0" />
                </font>
@@ -182,7 +182,7 @@
                   <Font name="System Bold" size="19.0" />
                </font>
             </Label>
-            <TextField fx:id="sendReceiverAccountInput" layoutX="93.0" layoutY="197.0" prefHeight="40.0" prefWidth="392.0" promptText="Enter receiver account number">
+            <TextField fx:id="sendReceiverAccountInput" layoutX="93.0" layoutY="197.0" prefHeight="40.0" prefWidth="392.0" promptText="Enter receiver account name">
                <font>
                   <Font name="System Italic" size="16.0" />
                </font>
