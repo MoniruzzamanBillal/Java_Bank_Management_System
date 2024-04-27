@@ -48,17 +48,14 @@ public class AdminPanelController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-      
-        
-        
-           // Set up column bindings
-    userAccountName.setCellValueFactory(new PropertyValueFactory<>("name"));
-    userAccountEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-    userAccountDeposit.setCellValueFactory(new PropertyValueFactory<>("deposit"));
-    userAccountWithdraw.setCellValueFactory(new PropertyValueFactory<>("withdraw"));
-    userAccountSend.setCellValueFactory(new PropertyValueFactory<>("send"));
-    userAccountReceive.setCellValueFactory(new PropertyValueFactory<>("receive"));
-        
+
+        // Set up column bindings
+        userAccountName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        userAccountEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        userAccountDeposit.setCellValueFactory(new PropertyValueFactory<>("deposit"));
+        userAccountWithdraw.setCellValueFactory(new PropertyValueFactory<>("withdraw"));
+        userAccountSend.setCellValueFactory(new PropertyValueFactory<>("send"));
+        userAccountReceive.setCellValueFactory(new PropertyValueFactory<>("receive"));
 
 // TODO
         fetchUserData();
@@ -77,28 +74,65 @@ public class AdminPanelController implements Initializable {
             rs = pst.executeQuery();
             while (rs.next()) {
                 System.out.println("result = ");
-                System.out.println(rs.getString(1));
-                System.out.println(rs.getString(2));
-                System.out.println(rs.getString(3));
-                System.out.println(rs.getString(4));
-                System.out.println(rs.getString(5));
-                System.out.println(rs.getString(6));
-                System.out.println(rs.getString(7));
+                System.out.println(" name =  " + rs.getString(1));
+                System.out.println(" email =  " + rs.getString(3));
+
 
                 String name = rs.getString(1);
-                String email = rs.getString(2);
-                String deposit = rs.getString(3);
-                String withdraw = rs.getString(4);
-                String send = rs.getString(5);
-                String receive = rs.getString(6);
+                String email = rs.getString(3);
 
-                userAccounts.add(new UserAccount(name, email, deposit, withdraw, send, receive));
-                
-                
-          
 
+//                for getting total deposit 
+                String depositQuery = " select sum(cast(depositAmount AS DECIMAL(10,2)))  FROM deposit  WHERE userEmail = ? ";
+                pst = con.prepareStatement(depositQuery);
+                pst.setString(1, email);
+                ResultSet depositRs = pst.executeQuery();
+                String totalDeposit = new String();
+                while (depositRs.next()) {
+                    totalDeposit = depositRs.getString(1);
+                }
+
+                //                for getting total withdraw
+                String withdrawQuery = " select sum(cast(withdrawAmount AS DECIMAL(10,2)))  FROM withdraw  WHERE userEmail = ? ";
+                pst = con.prepareStatement(withdrawQuery);
+                pst.setString(1, email);
+                ResultSet withdrawRs = pst.executeQuery();
+                String totalWithdraw = new String();
+                while (withdrawRs.next()) {
+                    totalWithdraw = withdrawRs.getString(1);
+                }
+
+//                for getting total send amount 
+                String sendQuery = " select sum(cast(receiveAmount AS DECIMAL(10,2)))  FROM receive  WHERE senderEmail = ? ";
+                pst = con.prepareStatement(sendQuery);
+                pst.setString(1, email);
+                ResultSet sendRs = pst.executeQuery();
+                String totalSend = new String();
+                while (sendRs.next()) {
+                    totalSend = sendRs.getString(1);
+                }
+
+//                for getting total receive amount 
+                String receiveQuery = " select sum(cast(receiveAmount AS DECIMAL(10,2)))  FROM receive  WHERE receiverEmail = ? ";
+                pst = con.prepareStatement(receiveQuery);
+                pst.setString(1, email);
+                ResultSet receiveRs = pst.executeQuery();
+                String totalReceive = new String();
+                while (receiveRs.next()) {
+                    totalReceive = receiveRs.getString(1);
+                }
+
+                System.out.println("Total deposit = " + totalDeposit);
+                System.out.println("Total totalWithdraw = " + totalWithdraw);
+                System.out.println("Total totalSend = " + totalSend);
+                 System.out.println("Total totalReceive = " + totalReceive);
+                System.out.println("");
+
+                userAccounts.add(new UserAccount(name, email, totalDeposit, totalWithdraw, totalSend, totalReceive));
+
+//            
             }
-          userTableView.setItems(userAccounts);
+            userTableView.setItems(userAccounts);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
