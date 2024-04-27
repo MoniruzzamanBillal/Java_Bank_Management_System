@@ -26,6 +26,8 @@ public class DashboardController implements Initializable {
     PreparedStatement pst;
     ResultSet rs;
 
+    ReusableFunction reusableFunction;
+
     @FXML
     private AnchorPane AccountDetailForm;
 
@@ -121,6 +123,7 @@ public class DashboardController implements Initializable {
     @FXML
     void handleAddDeposit(ActionEvent event) {
         try {
+
             String email = LoggedInUser.userEmail;
             String depositAmount = depositMoneyInput.getText();
             LocalDate currentDate = LocalDate.now();
@@ -142,22 +145,7 @@ public class DashboardController implements Initializable {
 
             depositMoneyInput.setText("");
 
-            String que2 = " SELECT SUM(CAST(depositAmount AS DECIMAL(10,2)))  FROM deposit WHERE userEmail = ?   ";
-            pst = con.prepareStatement(que2);
-            pst.setString(1, email);
-            rs = pst.executeQuery();
-            if (!rs.next()) {
-                alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error Message");
-                alert.setHeaderText(null);
-                alert.setContentText("No user found for this email - " + email);
-                alert.showAndWait();
-            } else {
-                String totalDepositAmount = rs.getString(1);
-                System.out.println("Total deposit = " + totalDepositAmount);
 
-                deposit_TotalDEpositAmount.setText(totalDepositAmount);
-            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -317,6 +305,8 @@ public class DashboardController implements Initializable {
     @FXML
     void handleShowDepositForm(ActionEvent event) {
         switchForm(event);
+
+        ReusableFunction reusableFunction = new ReusableFunction();
 
         try {
             String email = LoggedInUser.userEmail;

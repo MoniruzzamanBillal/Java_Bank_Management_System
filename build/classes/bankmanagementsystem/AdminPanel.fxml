@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="531.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bankmanagementsystem.AdminPanelController">
+   <children>
+      <AnchorPane prefHeight="531.0" prefWidth="206.0" style="-fx-background-color: gray;">
+         <children>
+            <Label layoutX="31.0" layoutY="14.0" text="Admin  Panel" textFill="WHITE">
+               <font>
+                  <Font name="System Bold Italic" size="24.0" />
+               </font>
+            </Label>
+            <Button layoutX="15.0" layoutY="214.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="184.0" text="Users">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Button>
+            <Button layoutX="11.0" layoutY="292.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="184.0" text="Transaction History">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="UsersForm" layoutX="206.0" prefHeight="531.0" prefWidth="561.0">
+         <children>
+            <Label layoutX="152.0" layoutY="36.0" text="Total users : ">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="272.0" layoutY="36.0" text="123">
+               <font>
+                  <Font name="System Bold Italic" size="20.0" />
+               </font>
+            </Label>
+            <TableView fx:id="userTableView" layoutX="6.0" layoutY="128.0" prefHeight="346.0" prefWidth="550.0">
+              <columns>
+                <TableColumn fx:id="userAccountName" prefWidth="94.40003967285156" text="Account Name" />
+                <TableColumn fx:id="userAccountEmail" prefWidth="96.0" text="Email" />
+                  <TableColumn fx:id="userAccountDeposit" prefWidth="77.5999755859375" text="Deposit" />
+                  <TableColumn fx:id="userAccountWithdraw" prefWidth="96.0" text="Withdraw" />
+                  <TableColumn fx:id="userAccountSend" prefWidth="85.5999755859375" text="Send" />
+                  <TableColumn fx:id="userAccountReceive" prefWidth="99.20004882812498" text="Receive" />
+              </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
