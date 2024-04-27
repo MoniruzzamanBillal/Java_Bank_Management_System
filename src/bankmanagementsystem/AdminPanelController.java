@@ -16,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
@@ -26,6 +27,11 @@ public class AdminPanelController implements Initializable {
     PreparedStatement pst;
     ResultSet rs;
 
+    
+        @FXML
+    private Label totalUserNumber;
+        
+        
     @FXML
     private Button logoutBtn;
 
@@ -37,7 +43,6 @@ public class AdminPanelController implements Initializable {
 
         //        to  hide admin  form 
         logoutBtn.getScene().getWindow().hide();
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
         Parent root = loader.load();
 
@@ -148,11 +153,13 @@ public class AdminPanelController implements Initializable {
     //function for getting user data from database starts 
     private void fetchUserData() {
         try {
+            int userCount = 0 ;
             con = database.connectDb();
             String que = " select * from userInfo  ";
             pst = con.prepareStatement(que);
             rs = pst.executeQuery();
             while (rs.next()) {
+                userCount ++ ;
                 String name = rs.getString(1);
                 String email = rs.getString(3);
 
@@ -205,6 +212,7 @@ public class AdminPanelController implements Initializable {
                 userAccounts.add(new UserAccount(name, email, totalDeposit, totalWithdraw, totalSend, totalReceive));
             }
             userTableView.setItems(userAccounts);
+         totalUserNumber.setText(String.valueOf(userCount));
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
