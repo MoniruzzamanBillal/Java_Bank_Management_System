@@ -65,18 +65,26 @@ public class DashboardController implements Initializable {
 
     @FXML
     private Label deposit_TotalDEpositAmount;
-
-    @FXML
+    
+        @FXML
     private Label details_accountNo;
 
     @FXML
-    private Label details_balance;
+    private Label details_address;
+
+    @FXML
+    private Label details_name;
+
+    @FXML
+    private Label details_nid;
+
+    @FXML
+    private Label details_number;
 
     @FXML
     private Label details_email;
 
-    @FXML
-    private Label details_name;
+
 
     @FXML
     private TextField sendAmountInput;
@@ -301,6 +309,13 @@ public class DashboardController implements Initializable {
     @FXML
     void handleShowDetailForn(ActionEvent event) {
         switchForm(event);
+        System.out.println("Details form : ");
+        
+            
+            
+         
+            
+        
 
     }
 
@@ -354,6 +369,28 @@ public class DashboardController implements Initializable {
     @FXML
     void handleShowWithdrawForm(ActionEvent event) {
         switchForm(event);
+    }
+    
+    
+        @FXML
+    private Button logoutBtn;
+    
+        @FXML
+    void handleLogout(ActionEvent event) throws Exception {
+
+        LoggedInUser.userName = null;
+        LoggedInUser.userEmail = null;
+
+        //        to  hide admin  form 
+        logoutBtn.getScene().getWindow().hide();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
+        Parent root = loader.load();
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
+
     }
 
     @Override
@@ -415,9 +452,63 @@ public class DashboardController implements Initializable {
             }
         }
         // Check if the withdraw  form is visible ends  
+        
+        
+//        check if the details form is visible starts 
+
+        if(AccountDetailForm.isVisible()){
+            
+               try{
+                        con = database.connectDb();
+            String que = " select * from userInfo  ";
+                        pst = con.prepareStatement(que);
+            rs = pst.executeQuery();
+            
+            if(rs.next()){
+                
+                
+                
+                details_accountNo.setText(rs.getString(1) );
+                details_address.setText(rs.getString(6) );
+                details_name.setText(rs.getString(2) );
+                details_nid.setText(rs.getString(4) );
+                details_number.setText(rs.getString(5) );
+                details_email.setText(rs.getString(3) );
+                
+                       
+//     Label details_accountNo;
+//     Label details_address;
+//     Label details_name;
+//     Label details_nid;
+//    Label details_number;
+//     Label details_email;
+    
+    
+                
+            }
+                
+            }catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+            
+        }
+        
+        //        check if the details form is visible ends 
 
         System.out.println("logged in user in dashboard = " + LoggedInUser.userEmail);
 
     }
+    
+    
+    
+    
+    
+    
 
 }

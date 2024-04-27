@@ -150,7 +150,6 @@ public class AdminPanelController implements Initializable {
         try {
             con = database.connectDb();
             String que = " select * from userInfo  ";
-//             String que = " select * from userInfo where userRole <> 'admin' ";
             pst = con.prepareStatement(que);
             rs = pst.executeQuery();
             while (rs.next()) {
