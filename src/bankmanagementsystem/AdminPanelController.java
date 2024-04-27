@@ -24,6 +24,24 @@ public class AdminPanelController implements Initializable {
     private AnchorPane UsersForm;
 
     @FXML
+    private AnchorPane transactionForm;
+
+    @FXML
+    private TableView<Transaction> transactionTableView;
+
+    @FXML
+    private TableColumn<Transaction, String> receiveAmount;
+
+    @FXML
+    private TableColumn<Transaction, String> receiveTime;
+
+    @FXML
+    private TableColumn<Transaction, String> receiverEmail;
+
+    @FXML
+    private TableColumn<Transaction, String> senderEmail;
+
+    @FXML
     private TableView<UserAccount> userTableView;
 
     @FXML
@@ -45,6 +63,7 @@ public class AdminPanelController implements Initializable {
     private TableColumn<UserAccount, String> userAccountWithdraw;
 
     private ObservableList<UserAccount> userAccounts = FXCollections.observableArrayList();
+    private ObservableList<Transaction> transactions = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -57,30 +76,29 @@ public class AdminPanelController implements Initializable {
         userAccountSend.setCellValueFactory(new PropertyValueFactory<>("send"));
         userAccountReceive.setCellValueFactory(new PropertyValueFactory<>("receive"));
 
+        senderEmail.setCellValueFactory(new PropertyValueFactory<>("senderEmail"));
+        receiverEmail.setCellValueFactory(new PropertyValueFactory<>("receiverEmail"));
+        receiveAmount.setCellValueFactory(new PropertyValueFactory<>("receiveAmount"));
+        receiveTime.setCellValueFactory(new PropertyValueFactory<>("receiveTime"));
+
 // TODO
         fetchUserData();
+        fetchTransactionData();
     }
 
-    //function for getting user data from database 
+    //function for getting user data from database starts 
     private void fetchUserData() {
-
         try {
-
-            System.out.println("Get data from user ");
-
             con = database.connectDb();
             String que = " select * from userInfo ";
             pst = con.prepareStatement(que);
             rs = pst.executeQuery();
             while (rs.next()) {
-                System.out.println("result = ");
-                System.out.println(" name =  " + rs.getString(1));
-                System.out.println(" email =  " + rs.getString(3));
-
-
+//                System.out.println("result = ");
+//                System.out.println(" name =  " + rs.getString(1));
+//                System.out.println(" email =  " + rs.getString(3));
                 String name = rs.getString(1);
                 String email = rs.getString(3);
-
 
 //                for getting total deposit 
                 String depositQuery = " select sum(cast(depositAmount AS DECIMAL(10,2)))  FROM deposit  WHERE userEmail = ? ";
@@ -92,7 +110,7 @@ public class AdminPanelController implements Initializable {
                     totalDeposit = depositRs.getString(1);
                 }
 
-                //                for getting total withdraw
+                // for getting total withdraw
                 String withdrawQuery = " select sum(cast(withdrawAmount AS DECIMAL(10,2)))  FROM withdraw  WHERE userEmail = ? ";
                 pst = con.prepareStatement(withdrawQuery);
                 pst.setString(1, email);
@@ -121,18 +139,62 @@ public class AdminPanelController implements Initializable {
                 while (receiveRs.next()) {
                     totalReceive = receiveRs.getString(1);
                 }
-
-                System.out.println("Total deposit = " + totalDeposit);
-                System.out.println("Total totalWithdraw = " + totalWithdraw);
-                System.out.println("Total totalSend = " + totalSend);
-                 System.out.println("Total totalReceive = " + totalReceive);
-                System.out.println("");
+//
+//                System.out.println("Total deposit = " + totalDeposit);
+//                System.out.println("Total totalWithdraw = " + totalWithdraw);
+//                System.out.println("Total totalSend = " + totalSend);
+//                System.out.println("Total totalReceive = " + totalReceive);
+//                System.out.println("");
 
                 userAccounts.add(new UserAccount(name, email, totalDeposit, totalWithdraw, totalSend, totalReceive));
-
-//            
             }
             userTableView.setItems(userAccounts);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+    }
+    //function for getting user data from database  ends 
+
+//    
+//    
+//    
+    // Function to fetch transaction data starts 
+    private void fetchTransactionData() {
+
+        try {
+
+            con = database.connectDb();
+            String transactionQuery = "SELECT * FROM receive ORDER BY receiveTime DESC";
+            pst = con.prepareStatement(transactionQuery);
+            ResultSet transactionRs = pst.executeQuery();
+            while (transactionRs.next()) {
+                String senderEmail = transactionRs.getString("senderEmail");
+                String receiverEmail = transactionRs.getString("receiverEmail");
+                String receiveAmount = transactionRs.getString("receiveAmount");
+                String receiveTime = transactionRs.getString("receiveTime");
+                
+                         System.out.println("sender email = " + senderEmail);
+                System.out.println("receiver email = " + receiverEmail);
+                System.out.println("receive amount  email = " + receiveAmount);
+                System.out.println("receive time = " + receiveTime);
+                   System.out.println("" );
+                
+                
+                
+                transactions.add(new Transaction(senderEmail, receiverEmail, receiveAmount, receiveTime));
+
+       
+
+            }
+
+            transactionTableView.setItems(transactions);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -146,4 +208,5 @@ public class AdminPanelController implements Initializable {
 
     }
 
+    // Function to fetch transaction ends 
 }

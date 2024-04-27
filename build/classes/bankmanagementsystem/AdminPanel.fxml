@@ -28,7 +28,7 @@
             </Button>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="UsersForm" layoutX="206.0" prefHeight="531.0" prefWidth="561.0">
+      <AnchorPane fx:id="UsersForm" layoutX="206.0" prefHeight="531.0" prefWidth="561.0" visible="false">
          <children>
             <Label layoutX="152.0" layoutY="36.0" text="Total users : ">
                <font>
@@ -48,6 +48,23 @@
                   <TableColumn fx:id="userAccountWithdraw" prefWidth="96.0" text="Withdraw" />
                   <TableColumn fx:id="userAccountSend" prefWidth="85.5999755859375" text="Send" />
                   <TableColumn fx:id="userAccountReceive" prefWidth="99.20004882812498" text="Receive" />
+              </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="transactionForm" layoutX="206.0" prefHeight="531.0" prefWidth="562.0">
+         <children>
+            <Label layoutX="182.0" layoutY="22.0" text="All Transactions">
+               <font>
+                  <Font name="System Bold Italic" size="26.0" />
+               </font>
+            </Label>
+            <TableView fx:id="transactionTableView" layoutX="8.0" layoutY="95.0" prefHeight="402.0" prefWidth="550.0">
+              <columns>
+                <TableColumn fx:id="senderEmail" prefWidth="133.60003662109375" text="Sender Email" />
+                <TableColumn fx:id="receiverEmail" prefWidth="144.79998779296875" text="Receiver Email" />
+                  <TableColumn fx:id="receiveAmount" prefWidth="127.199951171875" text="Receive Amount" />
+                  <TableColumn fx:id="receiveTime" prefWidth="145.5999755859375" text="Transaction Date" />
               </columns>
             </TableView>
          </children>
