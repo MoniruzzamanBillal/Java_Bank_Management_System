@@ -11,9 +11,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 public class AdminPanelController implements Initializable {
 
@@ -21,6 +25,27 @@ public class AdminPanelController implements Initializable {
     Connection con;
     PreparedStatement pst;
     ResultSet rs;
+
+    @FXML
+    private Button logoutBtn;
+
+    @FXML
+    void handleLogout(ActionEvent event) throws Exception {
+
+        LoggedInUser.userName = null;
+        LoggedInUser.userEmail = null;
+
+        //        to  hide admin  form 
+        logoutBtn.getScene().getWindow().hide();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
+        Parent root = loader.load();
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
+
+    }
 
     @FXML
     private Button showUserBtn;
@@ -77,7 +102,7 @@ public class AdminPanelController implements Initializable {
     void handleShowTransactionForm(ActionEvent event) {
         System.out.println("Click on show transaction form  !!");
         switchForm(event);
-        fetchTransactionData();
+//        fetchTransactionData();
 
     }
 
@@ -85,7 +110,7 @@ public class AdminPanelController implements Initializable {
     void handleShowUserForm(ActionEvent event) {
         System.out.println("Click  on show user form  !!");
         switchForm(event);
-        fetchUserData();
+//        fetchUserData();
     }
 
     //    function for switching pages 
@@ -124,13 +149,11 @@ public class AdminPanelController implements Initializable {
     private void fetchUserData() {
         try {
             con = database.connectDb();
-            String que = " select * from userInfo ";
+            String que = " select * from userInfo  ";
+//             String que = " select * from userInfo where userRole <> 'admin' ";
             pst = con.prepareStatement(que);
             rs = pst.executeQuery();
             while (rs.next()) {
-//                System.out.println("result = ");
-//                System.out.println(" name =  " + rs.getString(1));
-//                System.out.println(" email =  " + rs.getString(3));
                 String name = rs.getString(1);
                 String email = rs.getString(3);
 

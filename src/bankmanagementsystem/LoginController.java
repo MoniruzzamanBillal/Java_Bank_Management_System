@@ -80,31 +80,58 @@ public class LoginController implements Initializable {
                 this.userPassword.setText("");
 
             } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Information Message");
-                alert.setHeaderText(null);
-                alert.setContentText("Successfully Login!");
-                alert.showAndWait();
+               
 
-                System.out.println(rs.getString("userName"));
-                System.out.println(rs.getString("userEmail"));
-                System.out.println(rs.getString("userPassword"));
-                System.out.println(rs.getString("userAddress"));
+//                System.out.println(rs.getString("userName"));
+//                System.out.println(rs.getString("userEmail"));
+//                System.out.println(rs.getString("userPassword"));
+//                System.out.println(rs.getString("userRole"));
+//                System.out.println(rs.getString("userAddress"));
                 LoggedInUser.userName = rs.getString("userName");
                 LoggedInUser.userEmail = rs.getString("userEmail");
                 
-                      //        to  hide Login form 
+                String userRole = rs.getString("userRole") ;
+                
+                System.out.println("User role = " + userRole );
+                
+                if("admin".equals(userRole)){
+                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Admin Loggedin successfully!!");
+                alert.showAndWait();
+                
+                
+                //        to  hide Login form 
         loginBtn.getScene().getWindow().hide();
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("AdminPanel.fxml"));
         Parent root = loader.load();
-
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();
 
-            }
 
+                
+                return ;
+                }
+                
+                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Successfully Login!");
+                alert.showAndWait();
+                
+
+                //        to  hide Login form 
+        loginBtn.getScene().getWindow().hide();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
+        Parent root = loader.load();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
+
+
+            }
 
         } catch (Exception e) {
             System.out.println(e.getMessage());

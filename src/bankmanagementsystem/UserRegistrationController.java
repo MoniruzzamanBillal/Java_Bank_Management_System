@@ -50,7 +50,7 @@ public class UserRegistrationController implements Initializable {
     @FXML
     void handleSignUp(ActionEvent event) {
 
-        String accountName, userName, userEmail, userNid, userPhone, userAddress, userPassword;
+        String accountName, userName, userEmail, userNid, userPhone, userAddress, userPassword, userRole;
         accountName = this.accountName.getText();
         userName = this.userName.getText();
         userEmail = this.userEmail.getText();
@@ -58,10 +58,11 @@ public class UserRegistrationController implements Initializable {
         userPhone = this.userPhone.getText();
         userAddress = this.userAddress.getText();
         userPassword = this.userPAssword.getText();
+        userRole = "user";
 
         try {
             con = database.connectDb();
-            String que = "insert into userInfo values(? ,? , ? , ? , ? , ? , ?)";
+            String que = "insert into userInfo values(? ,? , ? , ? , ? , ? , ? ,?)";
             pst = con.prepareStatement(que);
             pst.setString(1, accountName);
             pst.setString(2, userName);
@@ -70,6 +71,7 @@ public class UserRegistrationController implements Initializable {
             pst.setString(5, userPhone);
             pst.setString(6, userAddress);
             pst.setString(7, userPassword);
+            pst.setString(8, userRole);
             pst.executeUpdate();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -77,27 +79,25 @@ public class UserRegistrationController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("user Addedddd!");
             alert.showAndWait();
-            
+
             //        to  hide sign up form 
-        signupBtn.getScene().getWindow().hide();
+            signupBtn.getScene().getWindow().hide();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
-        Parent root = loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
+            Parent root = loader.load();
 
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.show();
-        
-        
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            e.printStackTrace(); 
+            e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error Message");
-                alert.setHeaderText(null);
-                alert.setContentText(e.getMessage());
-                alert.showAndWait();
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
         }
 
     }
@@ -114,10 +114,6 @@ public class UserRegistrationController implements Initializable {
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();
-
-
-
-
 
     }
 
