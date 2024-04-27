@@ -290,7 +290,7 @@ public class DashboardController implements Initializable {
                 String totalDepositAmount = rs.getString(1);
                 System.out.println("Total deposit = " + totalDepositAmount);
 
-                withdraw_totalWithdraw.setText(totalDepositAmount);
+          
 
             }
 
@@ -311,12 +311,6 @@ public class DashboardController implements Initializable {
         switchForm(event);
         System.out.println("Details form : ");
         
-            
-            
-         
-            
-        
-
     }
 
     @FXML
@@ -344,9 +338,6 @@ public class DashboardController implements Initializable {
 
                 String totalDepositAmount = rs.getString(1);
                 System.out.println("Total deposit = " + totalDepositAmount);
-
-                deposit_TotalDEpositAmount.setText(totalDepositAmount);
-
             }
 
         } catch (Exception e) {
