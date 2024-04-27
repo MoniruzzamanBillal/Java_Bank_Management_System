@@ -10,7 +10,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.layout.AnchorPane;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class AdminPanelController implements Initializable {
@@ -19,6 +21,12 @@ public class AdminPanelController implements Initializable {
     Connection con;
     PreparedStatement pst;
     ResultSet rs;
+
+    @FXML
+    private Button showUserBtn;
+
+    @FXML
+    private Button transactionHistoryBtn;
 
     @FXML
     private AnchorPane UsersForm;
@@ -64,6 +72,32 @@ public class AdminPanelController implements Initializable {
 
     private ObservableList<UserAccount> userAccounts = FXCollections.observableArrayList();
     private ObservableList<Transaction> transactions = FXCollections.observableArrayList();
+
+    @FXML
+    void handleShowTransactionForm(ActionEvent event) {
+        System.out.println("Click on show transaction form  !!");
+        switchForm(event);
+        fetchTransactionData();
+
+    }
+
+    @FXML
+    void handleShowUserForm(ActionEvent event) {
+        System.out.println("Click  on show user form  !!");
+        switchForm(event);
+        fetchUserData();
+    }
+
+    //    function for switching pages 
+    public void switchForm(ActionEvent event) {
+        if (event.getSource() == showUserBtn) {
+            UsersForm.setVisible(true);
+            transactionForm.setVisible(false);
+        } else if (event.getSource() == transactionHistoryBtn) {
+            UsersForm.setVisible(false);
+            transactionForm.setVisible(true);
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -179,18 +213,14 @@ public class AdminPanelController implements Initializable {
                 String receiverEmail = transactionRs.getString("receiverEmail");
                 String receiveAmount = transactionRs.getString("receiveAmount");
                 String receiveTime = transactionRs.getString("receiveTime");
-                
-                         System.out.println("sender email = " + senderEmail);
+
+                System.out.println("sender email = " + senderEmail);
                 System.out.println("receiver email = " + receiverEmail);
                 System.out.println("receive amount  email = " + receiveAmount);
                 System.out.println("receive time = " + receiveTime);
-                   System.out.println("" );
-                
-                
-                
-                transactions.add(new Transaction(senderEmail, receiverEmail, receiveAmount, receiveTime));
+                System.out.println("");
 
-       
+                transactions.add(new Transaction(senderEmail, receiverEmail, receiveAmount, receiveTime));
 
             }
 

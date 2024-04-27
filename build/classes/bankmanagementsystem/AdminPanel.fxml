@@ -16,19 +16,19 @@
                   <Font name="System Bold Italic" size="24.0" />
                </font>
             </Label>
-            <Button layoutX="15.0" layoutY="214.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="184.0" text="Users">
+            <Button fx:id="showUserBtn" layoutX="15.0" layoutY="214.0" mnemonicParsing="false" onAction="#handleShowUserForm" prefHeight="38.0" prefWidth="184.0" text="Users">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Button>
-            <Button layoutX="11.0" layoutY="292.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="184.0" text="Transaction History">
+            <Button fx:id="transactionHistoryBtn" layoutX="11.0" layoutY="292.0" mnemonicParsing="false" onAction="#handleShowTransactionForm" prefHeight="38.0" prefWidth="184.0" text="Transaction History">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Button>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="UsersForm" layoutX="206.0" prefHeight="531.0" prefWidth="561.0" visible="false">
+      <AnchorPane fx:id="UsersForm" layoutX="206.0" prefHeight="531.0" prefWidth="561.0">
          <children>
             <Label layoutX="152.0" layoutY="36.0" text="Total users : ">
                <font>
@@ -52,7 +52,7 @@
             </TableView>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="transactionForm" layoutX="206.0" prefHeight="531.0" prefWidth="562.0">
+      <AnchorPane fx:id="transactionForm" layoutX="206.0" prefHeight="531.0" prefWidth="562.0" visible="false">
          <children>
             <Label layoutX="182.0" layoutY="22.0" text="All Transactions">
                <font>

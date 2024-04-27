@@ -33,6 +33,8 @@ public class DashboardController implements Initializable {
 
     @FXML
     private AnchorPane DepositForm;
+    
+  
 
     @FXML
     private AnchorPane withdrawForm;
@@ -305,8 +307,6 @@ public class DashboardController implements Initializable {
     @FXML
     void handleShowDepositForm(ActionEvent event) {
         switchForm(event);
-
-        ReusableFunction reusableFunction = new ReusableFunction();
 
         try {
             String email = LoggedInUser.userEmail;
