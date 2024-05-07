@@ -138,12 +138,19 @@ public class DashboardController implements Initializable {
 //    function for adding deposit money starts 
     @FXML
     void handleAddDeposit(ActionEvent event) {
-
         try {
-
             String email = LoggedInUser.userEmail;
             String depositAmount = depositMoneyInput.getText();
             LocalDate currentDate = LocalDate.now();
+
+            if (depositAmount.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Please enter a deposit amount.");
+                alert.showAndWait();
+                return;
+            }
 
             con = database.connectDb();
             String que = " insert into deposit values (  ? , ? , ? ) ";
@@ -162,6 +169,20 @@ public class DashboardController implements Initializable {
 
             depositMoneyInput.setText("");
 
+            try {
+                double totalBalance = getTotalBalance(LoggedInUser.userEmail);
+                System.out.println("total balance in deposit form  = " + totalBalance);
+                depositTotalBalance.setText(String.valueOf(totalBalance));
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setHeaderText(null);
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            }
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -171,21 +192,6 @@ public class DashboardController implements Initializable {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
-        
-        
-         try {
-                double totalBalance = getTotalBalance(LoggedInUser.userEmail);
-                System.out.println("total balance in deposit form  = " + totalBalance);
-                depositTotalBalance.setText(String.valueOf(totalBalance));
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                e.printStackTrace();
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error Message");
-                alert.setHeaderText(null);
-                alert.setContentText(e.getMessage());
-                alert.showAndWait();
-            }
 
     }
 //    function for adding deposit money ends  
@@ -194,17 +200,22 @@ public class DashboardController implements Initializable {
     @FXML
     void handleSendMoney(ActionEvent event) {
 
-        System.out.println("send money form  ");
-
         try {
-
-            System.out.println("Send money add click !! ");
 
             LocalDate currentDate = LocalDate.now();
             String receiverName = sendReceiverAccountInput.getText();
             String sendAmount = sendAmountInput.getText();
             String userPassword = sendPasswordInput.getText();
             String email = LoggedInUser.userEmail;
+
+            if (receiverName.isEmpty() || sendAmount.isEmpty() || userPassword.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Please fill in all fields.");
+                alert.showAndWait();
+                return;
+            }
 
             con = database.connectDb();
             String que = "Select userEmail , userName from userInfo where  userPassword=? and userEmail=?";
@@ -247,20 +258,24 @@ public class DashboardController implements Initializable {
                     alert.setHeaderText(null);
                     alert.setContentText("Money send successfully!!");
                     alert.showAndWait();
-                    
+
+                    sendReceiverAccountInput.setText("");
+                    sendAmountInput.setText("");
+                    sendPasswordInput.setText("");
+
                     try {
-                double totalBalance = getTotalBalance(LoggedInUser.userEmail);
-                System.out.println("total balance in send form   = " + totalBalance);
-                sendTotalBalance.setText(String.valueOf(totalBalance));
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                e.printStackTrace();
-                 alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error Message");
-                alert.setHeaderText(null);
-                alert.setContentText(e.getMessage());
-                alert.showAndWait();
-            }
+                        double totalBalance = getTotalBalance(LoggedInUser.userEmail);
+                        System.out.println("total balance in send form   = " + totalBalance);
+                        sendTotalBalance.setText(String.valueOf(totalBalance));
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        e.printStackTrace();
+                        alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error Message");
+                        alert.setHeaderText(null);
+                        alert.setContentText(e.getMessage());
+                        alert.showAndWait();
+                    }
 
                 }
 
@@ -282,10 +297,6 @@ public class DashboardController implements Initializable {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
-        
-         
-         
-         
 
     }
     //    function for sending  money ends  
@@ -298,6 +309,15 @@ public class DashboardController implements Initializable {
             String email = LoggedInUser.userEmail;
             String withdrawAmount = withdrawInput.getText();
             LocalDate currentDate = LocalDate.now();
+
+            if (withdrawAmount.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Please enter a withdraw amount.");
+                alert.showAndWait();
+                return;
+            }
 
             con = database.connectDb();
             String que = " insert into withdraw values (  ? , ? , ? ) ";
@@ -316,24 +336,18 @@ public class DashboardController implements Initializable {
 
             withdrawInput.setText("");
 
-            String que2 = " SELECT SUM(CAST(withdrawAmount AS DECIMAL(10,2)))  FROM withdraw WHERE userEmail = ?   ";
-
-            pst = con.prepareStatement(que2);
-            pst.setString(1, email);
-
-            rs = pst.executeQuery();
-
-            if (!rs.next()) {
+            try {
+                double totalBalance = getTotalBalance(LoggedInUser.userEmail);
+                System.out.println("total balance in withdraw form   = " + totalBalance);
+                withdrawTotalBalance.setText(String.valueOf(totalBalance));
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
                 alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error Message");
                 alert.setHeaderText(null);
-                alert.setContentText("No user found for this email - " + email);
+                alert.setContentText(e.getMessage());
                 alert.showAndWait();
-
-            } else {
-
-//                String totalDepositAmount = rs.getString(1);
-//                System.out.println("Total deposit = " + totalDepositAmount);
             }
 
         } catch (Exception e) {
@@ -355,7 +369,8 @@ public class DashboardController implements Initializable {
         System.out.println("Details form fro line 321 : ");
 
         double totalBalance = getTotalBalance(LoggedInUser.userEmail);
-        System.out.println("total balance  : " + totalBalance);
+
+        details_balanceMoney.setText(String.valueOf(totalBalance));
 
     }
 
@@ -382,9 +397,8 @@ public class DashboardController implements Initializable {
     @FXML
     void handleShowSendForm(ActionEvent event) {
         switchForm(event);
-        
-        
-          System.out.println("send   money form  ");
+
+        System.out.println("send   money form  ");
         try {
             double totalBalance = getTotalBalance(LoggedInUser.userEmail);
             System.out.println("total balance in send money form form  = " + totalBalance);
@@ -398,15 +412,14 @@ public class DashboardController implements Initializable {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
-        
-        
+
     }
 
     @FXML
     void handleShowWithdrawForm(ActionEvent event) {
         switchForm(event);
-        
-         System.out.println("withdraw money form  ");
+
+        System.out.println("withdraw money form  ");
         try {
             double totalBalance = getTotalBalance(LoggedInUser.userEmail);
             System.out.println("total balance in send money form form  = " + totalBalance);
@@ -420,9 +433,7 @@ public class DashboardController implements Initializable {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
-        
-        
-        
+
     }
 
     @FXML
@@ -453,8 +464,6 @@ public class DashboardController implements Initializable {
         System.out.println("logged in user in dashboard = " + LoggedInUser.userEmail);
 
         System.out.println("total balance in initializer call  = " + getTotalBalance(LoggedInUser.userEmail));
-
-
 
         // Check if the deposit form is visible starts 
         if (DepositForm.isVisible()) {

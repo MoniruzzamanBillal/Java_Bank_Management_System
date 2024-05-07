@@ -58,6 +58,15 @@ public class LoginController implements Initializable {
 
         userEmail = this.userEmail.getText();
         userPassword = this.userPassword.getText();
+        
+           if (userEmail.isEmpty() || userPassword.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setHeaderText(null);
+                    alert.setContentText("Please fill in all fields.");
+                alert.showAndWait();
+                return;
+            }
 
         try {
 

@@ -60,6 +60,15 @@ public class UserRegistrationController implements Initializable {
         userPassword = this.userPAssword.getText();
         userRole = "user";
 
+        if (accountName.isEmpty() || userName.isEmpty() || userEmail.isEmpty() || userNid.isEmpty() || userPhone.isEmpty() || userAddress.isEmpty() || userPassword.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill in all fields.");
+            alert.showAndWait();
+            return;
+        }
+
         try {
             con = database.connectDb();
             String que = "insert into userInfo values(? ,? , ? , ? , ? , ? , ? ,?)";
