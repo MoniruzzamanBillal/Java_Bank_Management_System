@@ -62,7 +62,7 @@ public class DashboardController implements Initializable {
     private TextField depositMoneyInput;
 
     @FXML
-    private Label deposit_TotalDEpositAmount;
+    private Label depositTotalBalance;
 
     @FXML
     private Label details_accountNo;
@@ -83,6 +83,9 @@ public class DashboardController implements Initializable {
     private Label details_email;
 
     @FXML
+    private Label details_balanceMoney;
+
+    @FXML
     private TextField sendAmountInput;
 
     @FXML
@@ -93,6 +96,12 @@ public class DashboardController implements Initializable {
 
     @FXML
     private TextField sendReceiverAccountInput;
+
+    @FXML
+    private Label sendTotalBalance;
+
+    @FXML
+    private Label withdrawTotalBalance;
 
     @FXML
     private TextField withdrawInput;
@@ -126,8 +135,10 @@ public class DashboardController implements Initializable {
         }
     }
 
+//    function for adding deposit money starts 
     @FXML
     void handleAddDeposit(ActionEvent event) {
+
         try {
 
             String email = LoggedInUser.userEmail;
@@ -162,9 +173,13 @@ public class DashboardController implements Initializable {
         }
 
     }
+//    function for adding deposit money ends  
 
+    //    function for sending  money starts   
     @FXML
     void handleSendMoney(ActionEvent event) {
+
+        System.out.println("send money form  ");
 
         try {
 
@@ -240,7 +255,9 @@ public class DashboardController implements Initializable {
         }
 
     }
+    //    function for sending  money ends  
 
+    //    function for withdraw money starts   
     @FXML
     void handleWithdrawMoney(ActionEvent event) {
 
@@ -282,9 +299,8 @@ public class DashboardController implements Initializable {
 
             } else {
 
-                String totalDepositAmount = rs.getString(1);
-                System.out.println("Total deposit = " + totalDepositAmount);
-
+//                String totalDepositAmount = rs.getString(1);
+//                System.out.println("Total deposit = " + totalDepositAmount);
             }
 
         } catch (Exception e) {
@@ -298,41 +314,26 @@ public class DashboardController implements Initializable {
         }
 
     }
+    //    function for withdraw money ends   
 
     @FXML
     void handleShowDetailForn(ActionEvent event) {
         switchForm(event);
-        System.out.println("Details form : ");
+        System.out.println("Details form fro line 321 : ");
+
+        double totalBalance = getTotalBalance(LoggedInUser.userEmail);
+        System.out.println("total balance  : " + totalBalance);
 
     }
 
     @FXML
     void handleShowDepositForm(ActionEvent event) {
         switchForm(event);
-
+        System.out.println("deposit  money form  ");
         try {
-            String email = LoggedInUser.userEmail;
-            con = database.connectDb();
-            String que2 = " SELECT SUM(CAST(depositAmount AS DECIMAL(10,2)))  FROM deposit WHERE userEmail = ?   ";
-
-            pst = con.prepareStatement(que2);
-            pst.setString(1, email);
-
-            rs = pst.executeQuery();
-
-            if (!rs.next()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error Message");
-                alert.setHeaderText(null);
-                alert.setContentText("No user found for this email - " + email);
-                alert.showAndWait();
-
-            } else {
-
-                String totalDepositAmount = rs.getString(1);
-                System.out.println("Total deposit = " + totalDepositAmount);
-            }
-
+            double totalBalance = getTotalBalance(LoggedInUser.userEmail);
+            System.out.println("total balance in deposit form  = " + totalBalance);
+            depositTotalBalance.setText(String.valueOf(totalBalance));
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -348,11 +349,47 @@ public class DashboardController implements Initializable {
     @FXML
     void handleShowSendForm(ActionEvent event) {
         switchForm(event);
+        
+        
+          System.out.println("send   money form  ");
+        try {
+            double totalBalance = getTotalBalance(LoggedInUser.userEmail);
+            System.out.println("total balance in send money form form  = " + totalBalance);
+            sendTotalBalance.setText(String.valueOf(totalBalance));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+        
+        
     }
 
     @FXML
     void handleShowWithdrawForm(ActionEvent event) {
         switchForm(event);
+        
+         System.out.println("withdraw money form  ");
+        try {
+            double totalBalance = getTotalBalance(LoggedInUser.userEmail);
+            System.out.println("total balance in send money form form  = " + totalBalance);
+            withdrawTotalBalance.setText(String.valueOf(totalBalance));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+        
+        
+        
     }
 
     @FXML
@@ -381,80 +418,64 @@ public class DashboardController implements Initializable {
         // TODO
 
         System.out.println("logged in user in dashboard = " + LoggedInUser.userEmail);
-      
-        System.out.println("total balance in initializer call  = " +   getTotalBalance(LoggedInUser.userEmail)  ) ;
-          System.out.println("logged in user in dashboard after calculation = " + LoggedInUser.userEmail);
+
+        System.out.println("total balance in initializer call  = " + getTotalBalance(LoggedInUser.userEmail));
+
+
 
         // Check if the deposit form is visible starts 
         if (DepositForm.isVisible()) {
-            // If yes, fetch and display the total deposit amount
+
             try {
-                String email = LoggedInUser.userEmail;
-
-                con = database.connectDb();
-                String que2 = "SELECT SUM(CAST(depositAmount AS DECIMAL(10,2))) FROM deposit WHERE userEmail = ?";
-                pst = con.prepareStatement(que2);
-                pst.setString(1, email);
-                rs = pst.executeQuery();
-
-                if (rs.next()) {
-                    String totalDepositAmount = rs.getString(1);
-                    deposit_TotalDEpositAmount.setText(totalDepositAmount);
-                }
-            } catch (SQLException e) {
+                double totalBalance = getTotalBalance(LoggedInUser.userEmail);
+                System.out.println("total balance in deposit form  = " + totalBalance);
+                depositTotalBalance.setText(String.valueOf(totalBalance));
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
                 e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error Message");
                 alert.setHeaderText(null);
-                alert.setContentText("Error fetching total deposit amount: " + e.getMessage());
+                alert.setContentText(e.getMessage());
                 alert.showAndWait();
             }
+
         }
         // Check if the deposit form is visible ends 
 
-        // Check if the withdraw  form is visible starts 
-        if (DepositForm.isVisible()) {
-            // If yes, fetch and display the total deposit amount
+        // Check if the send  form is visible starts 
+        if (sendMoneyForm.isVisible()) {
+
             try {
-                String email = LoggedInUser.userEmail;
-
-                con = database.connectDb();
-                String que2 = "SELECT SUM(CAST(depositAmount AS DECIMAL(10,2))) FROM deposit WHERE userEmail = ?";
-                pst = con.prepareStatement(que2);
-                pst.setString(1, email);
-                rs = pst.executeQuery();
-
-                if (rs.next()) {
-                    String totalDepositAmount = rs.getString(1);
-                    deposit_TotalDEpositAmount.setText(totalDepositAmount);
-                }
-            } catch (SQLException e) {
+                double totalBalance = getTotalBalance(LoggedInUser.userEmail);
+                System.out.println("total balance in withdraw form  = " + totalBalance);
+                sendTotalBalance.setText(String.valueOf(totalBalance));
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
                 e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error Message");
                 alert.setHeaderText(null);
-                alert.setContentText("Error fetching total deposit amount: " + e.getMessage());
+                alert.setContentText(e.getMessage());
                 alert.showAndWait();
             }
+
         }
-        // Check if the withdraw  form is visible ends  
+        // Check if the send  form is visible ends  
 
 //        check if the details form is visible starts 
         if (AccountDetailForm.isVisible()) {
-            
-//            LoggedInUser.userEmail
-//                    String depositQuery = "SELECT SUM(CAST(depositAmount AS DECIMAL(10,2))) FROM deposit WHERE userEmail = ?";
-//        pst = con.prepareStatement(depositQuery);
-//        pst.setString(1, email);
-//     ResultSet   dedpositRs = pst.executeQuery();
-
+            System.out.println("account detail form !!! ");
             try {
                 con = database.connectDb();
                 String que = " select * from userInfo WHERE userEmail = ?   ";
                 pst = con.prepareStatement(que);
-                pst.setString(1,  LoggedInUser.userEmail);
+                pst.setString(1, LoggedInUser.userEmail);
                 rs = pst.executeQuery();
 
+                double totalBalance = getTotalBalance(LoggedInUser.userEmail);
+                System.out.println("total balance in detail = " + totalBalance);
+                details_balanceMoney.setText(String.valueOf(totalBalance));
                 if (rs.next()) {
 
                     details_accountNo.setText(rs.getString(1));
@@ -463,10 +484,28 @@ public class DashboardController implements Initializable {
                     details_nid.setText(rs.getString(4));
                     details_number.setText(rs.getString(5));
                     details_email.setText(rs.getString(3));
-
-
                 }
 
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setHeaderText(null);
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            }
+        }
+
+        //        check if the details form is visible ends 
+//        check if withdraw form is visible starts 
+        if (withdrawForm.isVisible()) {
+            System.out.println("Hello ");
+
+            try {
+                double totalBalance = getTotalBalance(LoggedInUser.userEmail);
+                System.out.println("total balance in withdraw form  = " + totalBalance);
+                withdrawTotalBalance.setText(String.valueOf(totalBalance));
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 e.printStackTrace();
@@ -479,106 +518,69 @@ public class DashboardController implements Initializable {
 
         }
 
-        //        check if the details form is visible ends 
-
+//        check if withdraw form is visible starts 
     }
-    
+
 //    initializer ends 
-    
-    
-//    
-//    
 //function for finding total balance 
-
-    
     public double getTotalBalance(String email) {
-    double totalDeposit = 0;
-    double totalWithdrawal = 0;
-    double totalReceived = 0;
-    double totalSend  = 0 ;
+        double totalDeposit = 0;
+        double totalWithdrawal = 0;
+        double totalReceived = 0;
+        double totalSend = 0;
 
-    try {
-        con = database.connectDb();
-
-        // Query to get total deposit amount
-        String depositQuery = "SELECT SUM(CAST(depositAmount AS DECIMAL(10,2))) FROM deposit WHERE userEmail = ?";
-        pst = con.prepareStatement(depositQuery);
-        pst.setString(1, email);
-     ResultSet   dedpositRs = pst.executeQuery();
-//         ResultSet rs;
-
-        if (dedpositRs.next()) {
-            totalDeposit = dedpositRs.getDouble(1);
-            System.out.println("Total deposit = " + totalDeposit );
-        }
-
-        // Query to get total withdrawal amount
-        String withdrawalQuery = "SELECT SUM(CAST(withdrawAmount AS DECIMAL(10,2))) FROM withdraw WHERE userEmail = ?";
-        pst = con.prepareStatement(withdrawalQuery);
-        pst.setString(1, email);
-      ResultSet  withdrawRs = pst.executeQuery();
-        //         ResultSet rs;
-
-        if (withdrawRs.next()) {
-            totalWithdrawal = withdrawRs.getDouble(1);
-             System.out.println("Total withdraw = " + totalWithdrawal );
-        }
-
-        // Query to get total received amount
-        String receivedQuery = "SELECT SUM(CAST(receiveAmount AS DECIMAL(10,2))) FROM receive WHERE receiverEmail = ?";
-        pst = con.prepareStatement(receivedQuery);
-        pst.setString(1, email);
-     ResultSet   receivedRs = pst.executeQuery();
-          //         ResultSet rs;
-
-        if (receivedRs.next()) {
-            totalReceived = receivedRs.getDouble(1);
-             System.out.println("Total reeeceive = " + totalReceived );
-        }
-        
-        
-//        query to get  total send  amount
-        String sendQuery = "SELECT SUM(CAST(receiveAmount AS DECIMAL(10,2))) FROM receive WHERE senderEmail = ?";
-        pst = con.prepareStatement(sendQuery);
-        pst.setString(1, email);
-     ResultSet   sendRs = pst.executeQuery();
-          
-      if (sendRs.next()) {
-            totalSend = sendRs.getDouble(1);
-             System.out.println("Total send = " + totalSend );
-        }
-
-        
-        
-
-    } catch (SQLException e) {
-        e.printStackTrace();
-        // Handle exception
-    } finally {
-        // Close resources
         try {
-            if (rs != null) rs.close();
-            if (pst != null) pst.close();
-            if (con != null) con.close();
+            con = database.connectDb();
+
+            // Query to get total deposit amount
+            String depositQuery = "SELECT SUM(CAST(depositAmount AS DECIMAL(10,2))) FROM deposit WHERE userEmail = ?";
+            pst = con.prepareStatement(depositQuery);
+            pst.setString(1, email);
+            ResultSet dedpositRs = pst.executeQuery();
+
+            if (dedpositRs.next()) {
+                totalDeposit = dedpositRs.getDouble(1);
+            }
+
+            // Query to get total withdrawal amount
+            String withdrawalQuery = "SELECT SUM(CAST(withdrawAmount AS DECIMAL(10,2))) FROM withdraw WHERE userEmail = ?";
+            pst = con.prepareStatement(withdrawalQuery);
+            pst.setString(1, email);
+            ResultSet withdrawRs = pst.executeQuery();
+
+            if (withdrawRs.next()) {
+                totalWithdrawal = withdrawRs.getDouble(1);
+            }
+
+            // Query to get total received amount
+            String receivedQuery = "SELECT SUM(CAST(receiveAmount AS DECIMAL(10,2))) FROM receive WHERE receiverEmail = ?";
+            pst = con.prepareStatement(receivedQuery);
+            pst.setString(1, email);
+            ResultSet receivedRs = pst.executeQuery();
+
+            if (receivedRs.next()) {
+                totalReceived = receivedRs.getDouble(1);
+            }
+
+//        query to get  total send  amount
+            String sendQuery = "SELECT SUM(CAST(receiveAmount AS DECIMAL(10,2))) FROM receive WHERE senderEmail = ?";
+            pst = con.prepareStatement(sendQuery);
+            pst.setString(1, email);
+            ResultSet sendRs = pst.executeQuery();
+
+            if (sendRs.next()) {
+                totalSend = sendRs.getDouble(1);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println(e);
         }
+
+        // Calculate total balance
+        double totalBalance = (totalDeposit + totalReceived) - (totalWithdrawal + totalSend);
+
+        return totalBalance;
     }
-
-    // Calculate total balance
-    double totalBalance = (totalDeposit +totalReceived) -  (totalWithdrawal + totalSend)  ;
-    
-
-
-    return totalBalance;
-}
-
-    
- 
-    
-    
-    
-    
-    
 
 }
