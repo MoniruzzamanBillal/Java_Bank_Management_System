@@ -25,13 +25,10 @@ public class LoginController implements Initializable {
 
     @FXML
     private Button loginBtn;
-
     @FXML
     private Button registrationPage;
-
     @FXML
     private TextField userEmail;
-
     @FXML
 
     private PasswordField userPassword;
@@ -41,42 +38,36 @@ public class LoginController implements Initializable {
 
         //        to  hide login form 
         loginBtn.getScene().getWindow().hide();
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("userRegistration.fxml"));
         Parent root = loader.load();
-
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();
-
     }
 
     @FXML
     void handleLogin(ActionEvent event) {
 
         String userEmail, userPassword;
-
         userEmail = this.userEmail.getText();
         userPassword = this.userPassword.getText();
         
-           if (userEmail.isEmpty() || userPassword.isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error Message");
-                alert.setHeaderText(null);
-                    alert.setContentText("Please fill in all fields.");
-                alert.showAndWait();
-                return;
-            }
+        if (userEmail.isEmpty() || userPassword.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill in all fields.");
+            alert.showAndWait();
+            return;
+        }
 
         try {
-
             con = database.connectDb();
             String que = "Select * from userInfo where userEmail=? and userPassword=?";
 
             pst = con.prepareStatement(que);
             pst.setString(1, userEmail);
             pst.setString(2, userPassword);
-
             rs = pst.executeQuery();
 
             if (!rs.next()) {
@@ -94,16 +85,13 @@ public class LoginController implements Initializable {
                 LoggedInUser.userEmail = rs.getString("userEmail");
 
                 String userRole = rs.getString("userRole");
-
-                System.out.println("User role = " + userRole);
-
+//                System.out.println("User role = " + userRole);
                 if ("admin".equals(userRole)) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Information Message");
                     alert.setHeaderText(null);
                     alert.setContentText("Admin Loggedin successfully!!");
                     alert.showAndWait();
-
                     //        to  hide Login form 
                     loginBtn.getScene().getWindow().hide();
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("AdminPanel.fxml"));
@@ -111,7 +99,6 @@ public class LoginController implements Initializable {
                     Stage stage = new Stage();
                     stage.setScene(new Scene(root));
                     stage.show();
-
                     return;
                 }
 
@@ -120,7 +107,6 @@ public class LoginController implements Initializable {
                 alert.setHeaderText(null);
                 alert.setContentText("Successfully Login!");
                 alert.showAndWait();
-
                 //        to  hide Login form 
                 loginBtn.getScene().getWindow().hide();
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
@@ -128,19 +114,15 @@ public class LoginController implements Initializable {
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
                 stage.show();
-
             }
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
-
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
-
 }
