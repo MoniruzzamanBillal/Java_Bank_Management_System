@@ -171,6 +171,21 @@ public class DashboardController implements Initializable {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
+        
+        
+         try {
+                double totalBalance = getTotalBalance(LoggedInUser.userEmail);
+                System.out.println("total balance in deposit form  = " + totalBalance);
+                depositTotalBalance.setText(String.valueOf(totalBalance));
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setHeaderText(null);
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            }
 
     }
 //    function for adding deposit money ends  
@@ -232,6 +247,20 @@ public class DashboardController implements Initializable {
                     alert.setHeaderText(null);
                     alert.setContentText("Money send successfully!!");
                     alert.showAndWait();
+                    
+                    try {
+                double totalBalance = getTotalBalance(LoggedInUser.userEmail);
+                System.out.println("total balance in send form   = " + totalBalance);
+                sendTotalBalance.setText(String.valueOf(totalBalance));
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+                 alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setHeaderText(null);
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            }
 
                 }
 
@@ -253,6 +282,10 @@ public class DashboardController implements Initializable {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
+        
+         
+         
+         
 
     }
     //    function for sending  money ends  
